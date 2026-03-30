@@ -11,93 +11,28 @@
 *{box-sizing:border-box}
 body{margin:0;font-family:'Poppins',sans-serif;background:#f4f6f9}
 
-header{
-  background:linear-gradient(135deg,#0a2540,#163d6b);
-  color:#fff;
-  padding:20px;
-  text-align:center;
-}
+header{background:linear-gradient(135deg,#0a2540,#163d6b);color:#fff;padding:20px;text-align:center}
 
-h1{margin:0;font-weight:600}
+.container{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;padding:20px}
 
-.container{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:20px;
-  padding:20px;
-}
+.card{background:#fff;border-radius:15px;padding:15px;box-shadow:0 8px 20px rgba(0,0,0,0.08);transition:0.3s}
+.card:hover{transform:translateY(-5px)}
 
-.card{
-  background:#fff;
-  border-radius:15px;
-  padding:15px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.08);
-  transition:0.3s;
-  position:relative;
-}
+.main-img{width:100%;border-radius:10px;height:200px;object-fit:cover}
 
-.card:hover{
-  transform:translateY(-5px);
-}
-
-.badge{
-  position:absolute;
-  top:10px;
-  left:10px;
-  background:#00a86b;
-  color:#fff;
-  padding:5px 10px;
-  border-radius:20px;
-  font-size:12px;
-}
-
-.card img{
-  width:100%;
-  border-radius:10px;
-}
+.thumbs{display:flex;gap:5px;margin-top:8px}
+.thumbs img{width:50px;height:50px;object-fit:cover;border-radius:5px;cursor:pointer;border:2px solid transparent}
+.thumbs img:hover{border:2px solid #0a2540}
 
 .title{font-size:16px;margin:10px 0}
 .price{color:#00a86b;font-weight:600;font-size:18px}
 
-select,input{
-  width:100%;
-  padding:8px;
-  margin-top:5px;
-  border-radius:8px;
-  border:1px solid #ddd;
-}
+select,input{width:100%;padding:8px;margin-top:5px;border-radius:8px;border:1px solid #ddd}
 
-button{
-  background:#25D366;
-  color:white;
-  border:none;
-  padding:10px;
-  width:100%;
-  border-radius:8px;
-  margin-top:10px;
-  font-weight:600;
-  cursor:pointer;
-}
-
+button{background:#25D366;color:white;border:none;padding:10px;width:100%;border-radius:8px;margin-top:10px;font-weight:600;cursor:pointer}
 button:hover{background:#1ebe5d}
 
-/* WhatsApp flotante */
-.whatsapp-float{
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  background:#25D366;
-  color:#fff;
-  border-radius:50%;
-  width:60px;
-  height:60px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:30px;
-  box-shadow:0 5px 15px rgba(0,0,0,0.3);
-  cursor:pointer;
-}
+.whatsapp-float{position:fixed;bottom:20px;right:20px;background:#25D366;color:#fff;border-radius:50%;width:60px;height:60px;display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 5px 15px rgba(0,0,0,0.3);cursor:pointer}
 </style>
 </head>
 
@@ -114,16 +49,27 @@ button:hover{background:#1ebe5d}
 
 <script>
 const productos=[
-{id:1,nombre:'Audífonos Bluetooth Pro',precio:599,colores:['Negro','Blanco'],tag:'Top'},
-{id:2,nombre:'Audífonos Gamer RGB',precio:799,colores:['Negro','Rojo'],tag:'Gamer'},
-{id:3,nombre:'Audífonos Mini',precio:399,colores:['Blanco','Azul']},
-{id:4,nombre:'Powerbank 10000mAh',precio:450,colores:['Negro','Gris']},
-{id:5,nombre:'Powerbank 20000mAh',precio:650,colores:['Negro'],tag:'Alta Capacidad'},
-{id:6,nombre:'Powerbank Solar',precio:700,colores:['Verde','Negro']},
-{id:7,nombre:'Tira LED RGB',precio:350,colores:['Multicolor'],tag:'Decoración'},
-{id:8,nombre:'Lámpara LED',precio:280,colores:['Blanco','Negro']},
-{id:9,nombre:'Panel LED',precio:1200,colores:['Blanco']},
-{id:10,nombre:'Foco Smart',precio:220,colores:['RGB'],tag:'Smart'}
+{
+ id:1,
+ nombre:'Audífonos Bluetooth Pro',
+ precio:599,
+ imagenes:['img/audifonos1.jpg','img/audifonos1b.jpg','img/audifonos1c.jpg'],
+ colores:['Negro','Blanco']
+},
+{
+ id:2,
+ nombre:'Powerbank 10000mAh',
+ precio:450,
+ imagenes:['img/powerbank1.jpg','img/powerbank1b.jpg'],
+ colores:['Negro','Gris']
+},
+{
+ id:3,
+ nombre:'Tira LED RGB',
+ precio:350,
+ imagenes:['img/led1.jpg','img/led1b.jpg'],
+ colores:['Multicolor']
+}
 ];
 
 const cont=document.getElementById('productos');
@@ -131,8 +77,13 @@ const cont=document.getElementById('productos');
 productos.forEach(p=>{
   cont.innerHTML+=`
   <div class="card">
-    ${p.tag?`<div class="badge">${p.tag}</div>`:''}
-    <img src="https://via.placeholder.com/300">
+
+    <img id="main-${p.id}" class="main-img" src="${p.imagenes[0]}">
+
+    <div class="thumbs">
+      ${p.imagenes.map(img=>`<img src="${img}" onclick="cambiarImg(${p.id}, '${img}')">`).join('')}
+    </div>
+
     <div class="title">${p.nombre}</div>
     <div class="price">$${p.precio} MXN</div>
 
@@ -145,6 +96,10 @@ productos.forEach(p=>{
     <button onclick="comprar(${p.id})">Comprar por WhatsApp</button>
   </div>`;
 });
+
+function cambiarImg(id,img){
+  document.getElementById(`main-${id}`).src=img;
+}
 
 function comprar(id){
   const p=productos.find(x=>x.id===id);
