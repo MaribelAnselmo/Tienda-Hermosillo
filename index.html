@@ -114,7 +114,7 @@ button:hover{background:#1ebe5d}
 
 <script>
 const productos=[
-{id:1,nombre:'Audífonos Bluetooth Pro',precio:599,img:'img/audifonos1.png',colores:['Negro','Blanco'],tag:'Top'},
+{id:1,nombre:'Audífonos Bluetooth Pro',precio:599,imagenes:['img/Audifonos1.png'],colores:['Negro','Blanco'],tag:'Top'},
 {id:2,nombre:'Audífonos Gamer RGB',precio:799,colores:['Negro','Rojo'],tag:'Gamer'},
 {id:3,nombre:'Audífonos Mini',precio:399,colores:['Blanco','Azul']},
 {id:4,nombre:'Powerbank 10000mAh',precio:450,colores:['Negro','Gris']},
@@ -132,7 +132,7 @@ productos.forEach(p=>{
   cont.innerHTML+=`
   <div class="card">
     ${p.tag?`<div class="badge">${p.tag}</div>`:''}
-     <img src="${p.img}">
+     <img src="${p.imagenes ? p.imagenes[0] : ''}">
     <div class="title">${p.nombre}</div>
     <div class="price">$${p.precio} MXN</div>
 
@@ -164,3 +164,4 @@ function contactoGeneral(){
 
 </body>
 </html>
+
