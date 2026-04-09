@@ -169,6 +169,15 @@ productos.forEach(p=>{
 
     <input type="number" id="qty-${p.id}" value="1" min="1">
 
+    <!-- Servicio a domicilio -->
+    <select id="envio-${p.id}">
+      <option value="Sin envío">Recoger en punto</option>
+      <option value="Con envío">Servicio a domicilio</option>
+    </select>
+
+    <!-- NUEVO: Dirección del cliente -->
+    <input type="text" id="direccion-${p.id}" placeholder="Dirección de entrega (si aplica)">
+
     <button onclick="comprar(${p.id})">Comprar por WhatsApp</button>
   </div>`;
 });
@@ -181,9 +190,11 @@ function comprar(id){
   const p=productos.find(x=>x.id===id);
   const color=document.getElementById(`color-${id}`).value;
   const qty=document.getElementById(`qty-${id}`).value;
+  const envio=document.getElementById(`envio-${id}`).value;
+  const direccion=document.getElementById(`direccion-${id}`).value;
   const total=p.precio*qty;
 
-  const msg=`Hola, quiero comprar:%0AProducto: ${p.nombre}%0AColor: ${color}%0ACantidad: ${qty}%0ATotal: $${total} MXN`;
+  const msg=`Hola, quiero comprar:%0AProducto: ${p.nombre}%0AColor: ${color}%0ACantidad: ${qty}%0AEnvío: ${envio}%0ADirección: ${direccion}%0ATotal: $${total} MXN`;
 
   window.open(`https://wa.me/526625302790?text=${msg}`);
 }
@@ -195,3 +206,4 @@ function contactoGeneral(){
 
 </body>
 </html>
+
