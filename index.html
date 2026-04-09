@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -54,6 +54,26 @@ h1{margin:0;font-weight:600}
 .card img{
   width:100%;
   border-radius:10px;
+}
+
+/* NUEVO: miniaturas */
+.thumbs{
+  display:flex;
+  gap:5px;
+  margin-top:8px;
+}
+
+.thumbs img{
+  width:50px;
+  height:50px;
+  object-fit:cover;
+  border-radius:5px;
+  cursor:pointer;
+  border:2px solid transparent;
+}
+
+.thumbs img:hover{
+  border:2px solid #0a2540;
 }
 
 .title{font-size:16px;margin:10px 0}
@@ -114,7 +134,7 @@ button:hover{background:#1ebe5d}
 
 <script>
 const productos=[
-{id:1,nombre:'Audífonos Bluetooth',precio:350,imagenes:['img/Audifonos1.png'],colores:['Negro','Blanco'],tag:'Top'},
+{id:1,nombre:'Audífonos Bluetooth',precio:350,imagenes:['img/Audifonos1.png','img/Audifonos1.1.png','img/Audifonos1.2.png'],colores:['Negro','Blanco'],tag:'Top'},
 {id:2,nombre:'Audífonos Gamer RGB',precio:799,colores:['Negro','Rojo'],tag:'Gamer'},
 {id:3,nombre:'Audífonos Mini',precio:399,colores:['Blanco','Azul']},
 {id:4,nombre:'Powerbank 10000mAh',precio:450,colores:['Negro','Gris']},
@@ -132,7 +152,14 @@ productos.forEach(p=>{
   cont.innerHTML+=`
   <div class="card">
     ${p.tag?`<div class="badge">${p.tag}</div>`:''}
-     <img src="${p.imagenes ? p.imagenes[0] : ''}">
+     <img id="main-${p.id}" src="${p.imagenes ? p.imagenes[0] : ''}">
+
+     <div class="thumbs">
+       ${p.imagenes ? p.imagenes.map(img => 
+         `<img src="${img}" onclick="cambiarImg(${p.id}, '${img}')">`
+       ).join('') : ''}
+     </div>
+
     <div class="title">${p.nombre}</div>
     <div class="price">$${p.precio} MXN</div>
 
@@ -145,6 +172,10 @@ productos.forEach(p=>{
     <button onclick="comprar(${p.id})">Comprar por WhatsApp</button>
   </div>`;
 });
+
+function cambiarImg(id, img){
+  document.getElementById(`main-${id}`).src = img;
+}
 
 function comprar(id){
   const p=productos.find(x=>x.id===id);
@@ -164,4 +195,3 @@ function contactoGeneral(){
 
 </body>
 </html>
-
