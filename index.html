@@ -56,7 +56,6 @@ h1{margin:0;font-weight:600}
   border-radius:10px;
 }
 
-/* NUEVO: miniaturas */
 .thumbs{
   display:flex;
   gap:5px;
@@ -101,7 +100,22 @@ button{
 
 button:hover{background:#1ebe5d}
 
-/* WhatsApp flotante */
+/* CARRITO */
+.carrito{
+  position:fixed;
+  top:20px;
+  right:20px;
+  background:#fff;
+  padding:15px;
+  border-radius:10px;
+  width:260px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.2);
+  z-index:1000;
+}
+
+.carrito h3{margin:0 0 10px}
+.carrito-item{font-size:12px;margin-bottom:5px}
+
 .whatsapp-float{
   position:fixed;
   bottom:20px;
@@ -124,11 +138,19 @@ button:hover{background:#1ebe5d}
 <body>
 
 <header>
-<h1>Tienda Online - Hermosillo, Sonora</h1>
+<h1>Tienda Online   Hermosillo, Sonora</h1>
 <p>Compra fácil por WhatsApp 💬</p>
 </header>
 
 <section class="container" id="productos"></section>
+
+<!-- CARRITO -->
+<div class="carrito" id="carrito">
+<h3>🛒 Carrito</h3>
+<div id="lista"></div>
+<p><b>Total: $<span id="total">0</span></b></p>
+<button onclick="enviarCarrito()">Enviar por WhatsApp</button>
+</div>
 
 <div class="whatsapp-float" onclick="contactoGeneral()">💬</div>
 
@@ -142,6 +164,7 @@ const productos=[
 ];
 
 const cont=document.getElementById('productos');
+let carrito=[];
 
 productos.forEach(p=>{
   cont.innerHTML+=`
@@ -164,21 +187,63 @@ productos.forEach(p=>{
 
     <input type="number" id="qty-${p.id}" value="1" min="1">
 
-    <!-- Servicio a domicilio -->
     <select id="envio-${p.id}">
       <option value="Sin envío">Recoger en punto</option>
       <option value="Con envío">Servicio a domicilio</option>
     </select>
 
-    <!-- NUEVO: Dirección del cliente -->
     <input type="text" id="direccion-${p.id}" placeholder="Dirección de entrega (si aplica)">
 
+    <button onclick="agregarCarrito(${p.id})">Agregar al carrito</button>
     <button onclick="comprar(${p.id})">Comprar por WhatsApp</button>
   </div>`;
 });
 
 function cambiarImg(id, img){
   document.getElementById(`main-${id}`).src = img;
+}
+
+function agregarCarrito(id){
+  const p=productos.find(x=>x.id===id);
+  const qty=parseInt(document.getElementById(`qty-${id}`).value);
+
+  carrito.push({nombre:p.nombre,precio:p.precio,cantidad:qty});
+  renderCarrito();
+}
+
+function renderCarrito(){
+  const lista=document.getElementById('lista');
+  lista.innerHTML='';
+  let total=0;
+
+  carrito.forEach((item,i)=>{
+    total+=item.precio*item.cantidad;
+    lista.innerHTML+=`<div class="carrito-item">
+      ${item.nombre} x${item.cantidad} - $${item.precio*item.cantidad}
+      <button onclick="eliminarItem(${i})">❌</button>
+    </div>`;
+  });
+
+  document.getElementById('total').innerText=total;
+}
+
+function eliminarItem(i){
+  carrito.splice(i,1);
+  renderCarrito();
+}
+
+function enviarCarrito(){
+  let msg='Hola, quiero comprar:%0A';
+  let total=0;
+
+  carrito.forEach(item=>{
+    msg+=`${item.nombre} x${item.cantidad} - $${item.precio*item.cantidad}%0A`;
+    total+=item.precio*item.cantidad;
+  });
+
+  msg+=`Total: $${total} MXN`;
+
+  window.open(`https://wa.me/526625302790?text=${msg}`);
 }
 
 function comprar(id){
@@ -201,4 +266,3 @@ function contactoGeneral(){
 
 </body>
 </html>
-
